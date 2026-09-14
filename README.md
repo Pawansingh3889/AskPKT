@@ -20,7 +20,7 @@ pip install -r requirements.txt
 - [x] 3. Positional encoding — `model/positional.py`
 - [x] 4. Self-attention — `model/attention.py`
 - [x] 5. Multi-head + FFN + residual + LayerNorm — `model/block.py`
-- [ ] 6. Output head + sampling — `model/gpt.py`, `model/sample.py`
+- [x] 6. Output head + sampling — `model/gpt.py`, `model/sample.py`
 - [ ] 7. Training loop — `train.py`
 - [ ] 8. KV cache — `generate.py`
 - [ ] 9. Fine-tuning — `finetune.py`
