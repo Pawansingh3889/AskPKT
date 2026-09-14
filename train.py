@@ -144,6 +144,7 @@ def main():
 
             torch.save({
                 "model": model.state_dict(),
+                "optimizer": optimizer.state_dict(),  # needed to resume training cleanly
                 "iter": it,
                 "config": dict(vocab_size=tok.vocab_size, n_embd=N_EMBD, n_head=N_HEAD,
                                 n_layer=N_LAYER, block_size=BLOCK_SIZE, dropout=DROPOUT),

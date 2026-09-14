@@ -44,3 +44,14 @@ Jupyter extensions, select the `.venv` kernel) for hands-on experimentation
 against the real trained checkpoint: your own prompts, temperature
 comparisons, real next-token probabilities, and nearest-neighbour
 embeddings now that they're actually trained.
+
+## Training interactively
+`train_interactive.ipynb` — train in controllable chunks instead of one
+fixed `train.py` run: re-run one cell to train `ITERS_PER_CALL` more
+iterations at a time, check the loss curve and a live sample anytime,
+save a checkpoint whenever you want. Two modes: `MODE = "resume"` keeps
+training the existing checkpoint (optimizer momentum included), or
+`MODE = "fresh"` starts a new model with whatever architecture you set
+in the config cell (`N_EMBD`, `N_HEAD`, `N_LAYER`, `BLOCK_SIZE`,
+`DROPOUT`, `LEARNING_RATE`, `WEIGHT_DECAY`, `WARMUP_ITERS`,
+`SCHEDULE_HORIZON`, `BATCH_SIZE`).
