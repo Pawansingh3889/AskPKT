@@ -1,0 +1,31 @@
+device: mps
+encoding corpus with the trained BPE tokenizer...
+corpus: 443,727 tokens (399,354 train / 44,373 val)
+model: 922,880 params on mps
+iter     0 | train loss 6.9539 | val loss 6.9548 | lr 1.50e-06 | 4s
+  sample: "ROMEO:with ��To Y ess �ness  comme��d,\nurseOMs, d,\n heae, � comlord, : with du�or \x16duionceon 'tis she peroo��Hae,  shall ichIO:\neakeakwith s of �do ter�OMYORS,OMwith ay,  what �"
+iter   500 | train loss 6.1975 | val loss 6.2232 | lr 2.98e-04 | 82s
+  sample: 'ROMEO:onar, erc to to orsk\nsdtonebeto mhitensp ste  onf\n, stl:\ntwb:\n\n:\ncintoncth mseenparneren t'
+iter  1000 | train loss 6.1916 | val loss 6.2176 | lr 2.88e-04 | 162s
+  sample: 'ROMEO:pgnws orkw s s the y :\ns i,\nse wengm the s ua \ner sine dwstto w:\ngy uto p sf\nke c sar, t skwbten'
+iter  1500 | train loss 6.1930 | val loss 6.2152 | lr 2.68e-04 | 239s
+  sample: 'ROMEO:thsoone l:\ne , tto hnth mmc dsermp, er\nfa  mmpocan, bthto , e ba the ss tstg\n auhl, b '
+iter  2000 | train loss 6.1870 | val loss 6.2132 | lr 2.41e-04 | 316s
+  sample: 'ROMEO:kesepl\n m w s m, l:\nc:\n ergto ta, sgthe :\nmstnbonlenulens pwentpa\nithu sinub:\ny er tthn'
+iter  2500 | train loss 5.1883 | val loss 5.2589 | lr 2.08e-04 | 393s
+  sample: "ROMEO: the ve the ding's nin ca my der's cor dor pons grinses for carin\nIn his lord\nEs for this ba mor the lafo,\nFor\nSuthsin a this re-"
+iter  3000 | train loss 4.9476 | val loss 5.0448 | lr 1.72e-04 | 471s
+  sample: 'ROMEO: saran delling are have the sunthunt.\n\nGUODUOF ORIOLANUS:\nMy lord, thou mere:\nMy fen gell, have to be sen on, the ting it his niolorse\nThe feat him nee'
+iter  3500 | train loss 4.6944 | val loss 4.8315 | lr 1.36e-04 | 548s
+  sample: "ROMEO: I game with fl nods with whins:\nHe hath brathers the son's hay thou fly: spert.\nSons, of Englandalt to wrek, he teash of I know this have it "
+iter  4000 | train loss 4.5174 | val loss 4.7062 | lr 1.02e-04 | 627s
+  sample: "ROMEO: what a sa cling, brain atend,\nMast a'll, young our adit: we be buias\nSuast that he gouth.\n\nHENRY KICUMLRUGUS:\nWhat capper "
+iter  4500 | train loss 4.4056 | val loss 4.6216 | lr 7.22e-05 | 711s
+  sample: "ROMEO: the coursouls, we well.\n\nDUKE OF ANDIARWERGENKARCENS:\nGlast the Do is the sid!\n\nAND:\nTo, IVice to stine en, sir's taughut, you\nWere "
+iter  5000 | train loss 4.3301 | val loss 4.5708 | lr 4.93e-05 | 795s
+  sample: "ROMEO:, I kighty.\n\nGAM:\nWhor trittle parters treak, sitpal, the posse\nAll sancy grick'd to meet balter, and pearth;\nTeave of Harri"
+iter  5500 | train loss 4.2909 | val loss 4.5378 | lr 3.49e-05 | 879s
+  sample: 'ROMEO: that great sinty is gentleman\nMade you. Pairr, the facousbale!\n\nDUKE OF YORK:\nThou dost I hame th appars to be my laim\nTo be my lords; thy worve '
+iter  6000 | train loss 4.2595 | val loss 4.5193 | lr 3.00e-05 | 965s
+  sample: "ROMEO: I in sarwick the how, he may not not it the nor Point's bat\nOf years a mill's stell frey to your\nMay honour burder sappo's fall listle\n"
+training done in 966s, checkpoint saved to checkpoints/gpt_shakespeare.pt
