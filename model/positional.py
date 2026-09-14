@@ -50,15 +50,21 @@ class SinusoidalPositionalEncoding(nn.Module):
         # gradient to compute because it's math, not a learned weight.
         self.register_buffer("pe", pe)
 
-    def forward(self, seq_len: int) -> torch.Tensor:
-        assert seq_len <= self.max_len, (
-            f"sequence length {seq_len} exceeds max_len {self.max_len} "
+    def forward(self, seq_len: int, start_pos: int = 0) -> torch.Tensor:
+        assert start_pos + seq_len <= self.max_len, (
+            f"position {start_pos + seq_len} exceeds max_len {self.max_len} "
             "this encoding was built for"
         )
-        return self.pe[:seq_len]  # (seq_len, n_embd)
+        return self.pe[start_pos:start_pos + seq_len]  # (seq_len, n_embd)
 
-    def add_to(self, token_embeddings: torch.Tensor) -> torch.Tensor:
+    def add_to(self, token_embeddings: torch.Tensor, start_pos: int = 0) -> torch.Tensor:
         """Additive injection: position info is added elementwise to the
-        token embeddings, not concatenated -- same shape in, same shape out."""
+        token embeddings, not concatenated -- same shape in, same shape out.
+
+        start_pos matters for KV-cache decoding: a lone new token being
+        generated isn't at position 0 just because it's alone in THIS
+        call -- it's wherever it actually sits in the full sequence.
+        Without this, every incrementally-generated token would wrongly
+        get position 0's encoding added, over and over."""
         seq_len = token_embeddings.shape[-2]
-        return token_embeddings + self.forward(seq_len)
+        return token_embeddings + self.forward(seq_len, start_pos=start_pos)

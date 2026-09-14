@@ -42,13 +42,32 @@ class GPT(nn.Module):
         # parameter count of the two largest tables in a small model.
         self.lm_head.weight = self.token_emb.weight
 
-    def forward(self, idx: torch.Tensor) -> torch.Tensor:
-        """idx: (batch, seq_len) token ids -> (batch, seq_len, vocab_size) logits."""
+    def forward(self, idx: torch.Tensor, kv_cache=None, use_cache: bool = False,
+                start_pos: int = 0):
+        """idx: (batch, seq_len) token ids -> (batch, seq_len, vocab_size) logits.
+
+        kv_cache: None, or a list of one (k, v) cache per block (as
+            returned by an earlier use_cache=True call).
+        use_cache: if True, also return the updated per-block cache list.
+        start_pos: the ABSOLUTE position of idx's first token in the full
+            sequence -- 0 during training/prefill, but the cache's current
+            length during incremental decoding (see positional.py)."""
         B, T = idx.shape
-        assert T <= self.block_size, (
-            f"sequence length {T} exceeds block_size {self.block_size}"
+        assert start_pos + T <= self.block_size, (
+            f"position {start_pos + T} exceeds block_size {self.block_size}"
         )
-        x = self.pos_enc.add_to(self.token_emb(idx))
+        x = self.pos_enc.add_to(self.token_emb(idx), start_pos=start_pos)
+
+        if use_cache:
+            new_caches = []
+            for i, block in enumerate(self.blocks):
+                block_cache = kv_cache[i] if kv_cache is not None else None
+                x, new_cache = block(x, kv_cache=block_cache, use_cache=True)
+                new_caches.append(new_cache)
+            x = self.ln_f(x)
+            logits = self.lm_head(x)
+            return logits, new_caches
+
         for block in self.blocks:
             x = block(x)
         x = self.ln_f(x)

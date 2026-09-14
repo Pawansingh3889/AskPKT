@@ -22,7 +22,7 @@ pip install -r requirements.txt
 - [x] 5. Multi-head + FFN + residual + LayerNorm — `model/block.py`
 - [x] 6. Output head + sampling — `model/gpt.py`, `model/sample.py`
 - [x] 7. Training loop — `train.py`
-- [ ] 8. KV cache — `generate.py`
+- [x] 8. KV cache — `generate.py`
 - [ ] 9. Fine-tuning — `finetune.py`
 
 ## Hyperparameters

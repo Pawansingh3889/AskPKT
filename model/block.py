@@ -46,9 +46,19 @@ class MultiHeadAttention(nn.Module):
         self.proj = nn.Linear(n_embd, n_embd)
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, kv_cache=None, use_cache: bool = False):
         # Parallel heads, concatenated along the feature dimension:
         # n_head * head_size == n_embd again.
+        if use_cache:
+            outs, new_caches = [], []
+            for i, h in enumerate(self.heads):
+                head_cache = kv_cache[i] if kv_cache is not None else None
+                out, new_cache = h(x, kv_cache=head_cache, use_cache=True)
+                outs.append(out)
+                new_caches.append(new_cache)
+            out = torch.cat(outs, dim=-1)
+            return self.dropout(self.proj(out)), new_caches
+
         out = torch.cat([h(x) for h in self.heads], dim=-1)
         return self.dropout(self.proj(out))
 
@@ -89,12 +99,18 @@ class Block(nn.Module):
         self.ln2 = nn.LayerNorm(n_embd)
         self.ffwd = FeedForward(n_embd, dropout)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, kv_cache=None, use_cache: bool = False):
         # Residual / skip connection: x + f(x), never x REPLACED by f(x).
         # This is the "identity path" / "residual stream" -- gradients
         # can flow straight through the addition even when f(x)'s own
         # gradient is tiny, which is what makes deep stacks of these
         # trainable at all instead of vanishing.
+        if use_cache:
+            attn_out, new_cache = self.attn(self.ln1(x), kv_cache=kv_cache, use_cache=True)
+            x = x + attn_out
+            x = x + self.ffwd(self.ln2(x))
+            return x, new_cache
+
         x = x + self.attn(self.ln1(x))
         x = x + self.ffwd(self.ln2(x))
         return x
