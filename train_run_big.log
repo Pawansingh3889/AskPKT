@@ -1,0 +1,22 @@
+device: mps
+encoding corpus with the trained BPE tokenizer...
+corpus: 443,727 tokens (399,354 train / 44,373 val)
+model: 2,418,432 params on mps
+resumed model AND optimizer from checkpoints/gpt_shakespeare_big.pt at iter 4500
+iter  4500 | train loss 4.6059 | val loss 4.7712 | lr 1.43e-04 | 3s
+  sample: "ROMEO: gate and wirk. Or, frerers?\nDene, is the crack, sir? you that siss a swison our henn:\nAll to the mangence's siltin wo his "
+iter  5000 | train loss 4.5320 | val loss 4.7256 | lr 1.17e-04 | 101s
+  sample: "ROMEO: day be mown:\nWhein, you son dobrill I had he not a dagt.\n\nEDWELLA:\nAgast, sir, have fopt'd and the chilty.\n\nKING EDWII:\nHill my fird's for"
+iter  5500 | train loss 4.4354 | val loss 4.6599 | lr 9.28e-05 | 197s
+  sample: "ROMEO:'sign the hands with woby.\n\nAUNADUS:\nWo, a wyself, weed?\n\nA OF ESSlor:\nThanking Card, bleheldly and sor, as griit\nTo gat"
+iter  6000 | train loss 4.3474 | val loss 4.6116 | lr 7.15e-05 | 292s
+  sample: 'ROMEO: were boosty whenching and cos:\nI prae fareman, though this appy fortort.\nAnd now, though it gares me to rething chow eyes\nTo all the dit. Youself'
+iter  6500 | train loss 4.2881 | val loss 4.5609 | lr 5.39e-05 | 388s
+  sample: 'ROMEO: plry, I shall sade the gollow.\n\nGENENIUS:\nI the-tince brights thy life of grop\nWhy have I cannot not not the mind\nSade of your grephe-pri'
+iter  7000 | train loss 4.2553 | val loss 4.5371 | lr 4.08e-05 | 484s
+  sample: 'ROMEO: these gardimes is to be you,\nWhere thou sawicturee it the befort of you make.\n\nCULIET:\nThen beenss, thou art deeds his so, thou wrong,\nHath, but mine mis'
+iter  7500 | train loss 4.2042 | val loss 4.5016 | lr 3.27e-05 | 580s
+  sample: "ROMEO: seeth and forfity and sement wast,\nWhe'll hope to sine eyes the senious hart\nDine men, you gice might; will a prieves.\nO, tillaint the s"
+iter  8000 | train loss 4.1804 | val loss 4.4889 | lr 3.00e-05 | 675s
+  sample: "ROMEO:'dst that your prose;\nBut what so a poth'd to the kings?\n\nCIAR LE:\nBe the honours: I am you had not be may,\nA grave no wind of there the faire, for"
+training done in 677s, checkpoint saved to checkpoints/gpt_shakespeare_big.pt

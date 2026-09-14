@@ -38,6 +38,24 @@ pip install -r requirements.txt
 ## Data
 `data/tinyshakespeare.txt` — Tiny Shakespeare, ~1.1MB, public domain.
 
+## Scaling up
+`checkpoints/gpt_shakespeare_big.pt` — a second, larger model
+(`n_embd=192, n_head=6, n_layer=5, block_size=160`, 2,418,432 params,
+2.6x the original) trained for 8000 iterations, reaching val loss
+4.4889 (perplexity ~89) vs the original's 4.52 (~92) — a real, modest
+improvement from more capacity + more training.
+
+Getting there required working around real 8GB-RAM constraints: a
+single long `batch_size=64` run got OOM-killed by the OS partway
+through (this machine also runs a browser, editor, etc. sharing the
+same memory). Fix was two-fold: `train.py` now supports
+`RESUME_FROM=<checkpoint>` so a run can be split into several shorter
+PROCESSES instead of one long-running one, and dropping to
+`batch_size=16` reduced peak memory enough to finish reliably. All
+hyperparameters (`N_EMBD`, `N_HEAD`, `N_LAYER`, `BLOCK_SIZE`,
+`BATCH_SIZE`, `CHECKPOINT_PATH`, `RESUME_FROM`, etc.) are overridable
+as environment variables -- see the comment at the top of `train.py`.
+
 ## Exploring the trained model
 `explore.ipynb` — a Jupyter notebook (open in VS Code with the Python +
 Jupyter extensions, select the `.venv` kernel) for hands-on experimentation

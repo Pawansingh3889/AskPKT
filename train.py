@@ -22,23 +22,27 @@ from model.sample import sample
 from tokenizer.bpe import BPETokenizer
 
 # ---- hyperparameters, sized for an 8GB Apple M1 (see README) ----
-N_EMBD = 128
-N_HEAD = 4
-N_LAYER = 4
-BLOCK_SIZE = 128
-DROPOUT = 0.1
-BATCH_SIZE = 64
+# All overridable via environment variables, so a bigger run doesn't
+# require editing this file -- e.g.:
+#   N_EMBD=256 N_HEAD=8 N_LAYER=6 BLOCK_SIZE=192 MAX_ITERS=8000 \
+#   CHECKPOINT_PATH=checkpoints/gpt_shakespeare_big.pt python3 train.py
+N_EMBD = int(os.environ.get("N_EMBD", 128))
+N_HEAD = int(os.environ.get("N_HEAD", 4))
+N_LAYER = int(os.environ.get("N_LAYER", 4))
+BLOCK_SIZE = int(os.environ.get("BLOCK_SIZE", 128))
+DROPOUT = float(os.environ.get("DROPOUT", 0.1))
+BATCH_SIZE = int(os.environ.get("BATCH_SIZE", 64))
 
 MAX_ITERS = int(os.environ.get("MAX_ITERS", 2000))
 EVAL_INTERVAL = int(os.environ.get("EVAL_INTERVAL", 250))
 EVAL_ITERS = 50
 
-LEARNING_RATE = 3e-4
-WARMUP_ITERS = 200
-MIN_LR = 3e-5
-WEIGHT_DECAY = 0.01
+LEARNING_RATE = float(os.environ.get("LEARNING_RATE", 3e-4))
+WARMUP_ITERS = int(os.environ.get("WARMUP_ITERS", 200))
+MIN_LR = float(os.environ.get("MIN_LR", 3e-5))
+WEIGHT_DECAY = float(os.environ.get("WEIGHT_DECAY", 0.01))
 
-CHECKPOINT_PATH = "checkpoints/gpt_shakespeare.pt"
+CHECKPOINT_PATH = os.environ.get("CHECKPOINT_PATH", "checkpoints/gpt_shakespeare.pt")
 PROMPT = "ROMEO:"
 
 
@@ -126,10 +130,28 @@ def main():
     # cross-entropy loss + AdamW: the standard pretraining recipe.
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
 
+    # RESUME_FROM: continue an existing checkpoint instead of starting fresh.
+    # Also lets a long run be split into several shorter PROCESSES instead of
+    # one long-running one -- each fresh launch starts with clean memory,
+    # which matters on an 8GB machine where a single very long MPS process
+    # can accumulate memory pressure over thousands of iterations.
+    start_iter = 0
+    resume_from = os.environ.get("RESUME_FROM")
+    if resume_from:
+        ckpt = torch.load(resume_from, map_location=device)
+        model.load_state_dict(ckpt["model"])
+        if "optimizer" in ckpt:
+            optimizer.load_state_dict(ckpt["optimizer"])
+            print(f"resumed model AND optimizer from {resume_from} at iter {ckpt['iter']}")
+        else:
+            print(f"resumed model from {resume_from} at iter {ckpt['iter']} "
+                  f"(no saved optimizer state -- starting fresh momentum)")
+        start_iter = ckpt["iter"]
+
     os.makedirs("checkpoints", exist_ok=True)
     t0 = time.time()
 
-    for it in range(MAX_ITERS + 1):
+    for it in range(start_iter, MAX_ITERS + 1):
         lr = get_lr(it)
         for g in optimizer.param_groups:
             g["lr"] = lr
