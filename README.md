@@ -23,7 +23,7 @@ pip install -r requirements.txt
 - [x] 6. Output head + sampling — `model/gpt.py`, `model/sample.py`
 - [x] 7. Training loop — `train.py`
 - [x] 8. KV cache — `generate.py`
-- [ ] 9. Fine-tuning — `finetune.py`
+- [x] 9. Fine-tuning — `finetune.py`
 
 ## Hyperparameters
 | param | value |
