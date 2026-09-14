@@ -2,3 +2,5 @@ torch
 numpy
 requests
 matplotlib
+ipykernel
+jupyter

@@ -37,3 +37,10 @@ pip install -r requirements.txt
 
 ## Data
 `data/tinyshakespeare.txt` — Tiny Shakespeare, ~1.1MB, public domain.
+
+## Exploring the trained model
+`explore.ipynb` — a Jupyter notebook (open in VS Code with the Python +
+Jupyter extensions, select the `.venv` kernel) for hands-on experimentation
+against the real trained checkpoint: your own prompts, temperature
+comparisons, real next-token probabilities, and nearest-neighbour
+embeddings now that they're actually trained.
