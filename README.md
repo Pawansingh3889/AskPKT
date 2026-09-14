@@ -15,7 +15,7 @@ pip install -r requirements.txt
 ```
 
 ## Milestones
-- [ ] 1. BPE tokenizer — `tokenizer/bpe.py`
+- [x] 1. BPE tokenizer — `tokenizer/bpe.py`
 - [ ] 2. Embeddings — `model/embeddings.py`
 - [ ] 3. Positional encoding — `model/positional.py`
 - [ ] 4. Self-attention — `model/attention.py`
