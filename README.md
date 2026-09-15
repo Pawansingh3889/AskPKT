@@ -45,6 +45,26 @@ pip install -r requirements.txt
 4.4889 (perplexity ~89) vs the original's 4.52 (~92) — a real, modest
 improvement from more capacity + more training.
 
+## Continued training, same size
+Resumed the original 922,880-param model (`RESUME_FROM`, optimizer state
+intact) via `train_interactive.ipynb` and kept training it past where it
+was originally stopped: **iter 6600, val loss 4.4824** — better than the
+original's documented 4.52, and within noise of the bigger model's 4.4889
+(above), using the *original's* parameter count. More training on the
+small model closed most of the capacity gap, at least this far; not a
+claim that capacity stops mattering, just that this run hadn't converged
+yet when the earlier number was written down. Checkpoint itself isn't
+committed (`checkpoints/` is gitignored, binary weights don't belong in
+git); the evidence is the training-loop output saved in
+`train_interactive.ipynb`.
+
+`explore.ipynb` was run against this updated checkpoint too: real
+next-token probabilities after `"ROMEO:"` (`but` 7.5%, `I` 6.1%, `the`
+4.8%, ...), temperature-sampled output at 0.3 vs. greedy, and nearest-
+neighbour embeddings for subword tokens (`'lov'`'s nearest neighbours
+are `'liv'`, `'do'`, `'lif'`, `'tru'`, a genuinely interesting cluster
+for a byte-level tokenizer that's never seen a dictionary).
+
 Getting there required working around real 8GB-RAM constraints: a
 single long `batch_size=64` run got OOM-killed by the OS partway
 through (this machine also runs a browser, editor, etc. sharing the
